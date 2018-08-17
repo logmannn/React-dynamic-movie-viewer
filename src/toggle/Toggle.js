@@ -5,10 +5,9 @@ import { bindActionCreators } from "redux";
 import { toggleMessage } from "./actions";
 import { getMovies } from "../movies/actions";
 
-const Toggle = ({ messageVisibility, toggleMessage, getMovies }) => (
+const Toggle = ({ messageVisibility, toggleMessage }) => (
   <div>
     <button onClick={toggleMessage}>Toggle Me</button>
-    <button onClick={getMovies}>Load Movies</button>
     {messageVisibility && (
       <p>You will be seeing this if redux action is toggled</p>
     )}
@@ -22,12 +21,14 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      toggleMessage,
-      getMovies
+      toggleMessage
     },
     dispatch
   );
 
+// connects mapStateToProps with mapDispatchToProps
+// (which dispatches the onClick action from each specific actions.js
+// to the reducer where the processing happens)
 export default connect(
   mapStateToProps,
   mapDispatchToProps
