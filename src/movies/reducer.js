@@ -5,11 +5,12 @@ const initialState = {
   moviesLoaded: false,
   moviesLoadedAt: null,
   movie: {},
-  movieLoaded: false
+  movieLoaded: false,
+  total_pages: 0
 };
 
 export default function(state = initialState, action) {
-  const { type, data } = action;
+  const { type, data, total_pages } = action;
   switch (type) {
     case GET_MOVIES:
       return {
