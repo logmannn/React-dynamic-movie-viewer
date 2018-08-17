@@ -7,15 +7,19 @@ import { getMovies } from "./actions";
 
 class MoviesList extends PureComponent {
   async componentDidMount() {
-    const { getMovies, isLoaded } = this.props;
-    if (!isLoaded) {
+    const { getMovies, isLoaded, moviesLoadedAt } = this.props;
+    const oneHour = 60 * 60 * 1000;
+    const timeSinceMoviesPreviouslyLoaded =
+      (new Date() - new Date(moviesLoadedAt)) / 1000;
+    console.log(`${timeSinceMoviesPreviouslyLoaded}/${oneHour / 1000}`);
+    if (!isLoaded || new Date() - new Date(moviesLoadedAt) > oneHour) {
       getMovies();
     }
     // this.props.getMovies(); //(same thing)
   }
 
   render() {
-    const { movies, isLoaded } = this.props;
+    const { movies, isLoaded, moviesLoadedAt } = this.props;
     if (!isLoaded) return <h1>Loading</h1>;
     else {
       return (
@@ -32,7 +36,8 @@ class MoviesList extends PureComponent {
 // get props out of here
 const mapStateToProps = state => ({
   movies: state.movies.movies,
-  isLoaded: state.movies.moviesLoaded
+  isLoaded: state.movies.moviesLoaded,
+  moviesLoadedAt: state.movies.moviesLoadedAt
 });
 
 const mapDispatchToProps = dispatch =>
