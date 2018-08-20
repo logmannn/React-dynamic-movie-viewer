@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
@@ -23,25 +23,33 @@ const store = createStore(
   composeWithDevTools(applyMiddleware(...middleware, save()))
 );
 
-const App = () => (
-  <Provider store={store}>
-    <Router>
-      <div className="App">
-        <header className="App-header">
-          <Link to="/">
-            <img src={logo} className="App-logo" alt="logo" />
-          </Link>
-        </header>
-        <Toggle />
-        <Switch>
-          <Route exact path="/" component={MoviesList} />
-          <Route exact path="/page/:id" component={MoviesList} />
-          <Route path="/:id" component={MovieDetail} />
-        </Switch>
-      </div>
-    </Router>
-  </Provider>
-);
+const MyMoviesList = props => {
+  return <MoviesList {...props} />;
+};
+
+class App extends Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <Router>
+          <div className="App">
+            <header className="App-header">
+              <Link to="/">
+                <img src={logo} className="App-logo" alt="logo" />
+              </Link>
+            </header>
+            <Toggle />
+            <Switch>
+              <Route exact path="/" return component={MyMoviesList} />
+              <Route exact path="/page/:id" component={MyMoviesList} />
+              <Route path="/:id" component={MyMoviesList} />
+            </Switch>
+          </div>
+        </Router>
+      </Provider>
+    );
+  }
+}
 
 export default App;
 

@@ -4,9 +4,17 @@ import { bindActionCreators } from "redux";
 import styled from "styled-components";
 import Movie from "./Movie";
 import { getMovies } from "./actions";
-import { BrowserRouter as Router, Link } from "react-router-dom";
+import { BrowserRouter as Router, Link, withRouter } from "react-router-dom";
 
 class MoviesList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentPage: this.props.match.id,
+      previousPage: ""
+    };
+  }
+
   async componentDidMount() {
     const {
       getMovies,
@@ -15,6 +23,19 @@ class MoviesList extends Component {
       moviesLoadedAt,
       totalPages
     } = this.props;
+
+    // console.log("what is this" + match.id);
+
+    // if (match.id == null) {
+    //   this.setState({
+    //     currentPage: 1
+    //   });
+    // } else {
+    this.setState({
+      currentPage: match.id
+    });
+    // }
+
     const oneHour = 60 * 60 * 1000;
     // const oneHour = 1000;
     const timeSinceMoviesPreviouslyLoaded =
@@ -22,8 +43,24 @@ class MoviesList extends Component {
     console.log(`${timeSinceMoviesPreviouslyLoaded}/${oneHour / 1000}`);
 
     // if (!isLoaded || new Date() - new Date(moviesLoadedAt) > oneHour) {
+    // console.log(match.params.id);
+    console.log("componentDidMount" + match.params.id);
     getMovies(match.params.id);
     // }
+  }
+
+  async componentDidUpdate() {
+    const { match, getMovies } = this.props;
+    const { currentPage } = this.state;
+    console.log("match.params.id" + match.params.id);
+    console.log("currentPage" + currentPage);
+    if (match.params.id !== currentPage) {
+      console.log("match is not equal to currentpage");
+      this.setState({
+        currentPage: match.params.id
+      });
+      getMovies(match.params.id);
+    }
   }
 
   nextPages = currentPage => {
@@ -43,6 +80,7 @@ class MoviesList extends Component {
   };
 
   render() {
+    // console.log(this.state);
     const { movies, isLoaded, totalPages, match } = this.props;
 
     let currentPage = match.params.id;
@@ -59,6 +97,15 @@ class MoviesList extends Component {
               <Movie key={movie.id} movie={movie} />
             ))}
           </MovieGrid>
+          <button
+            type="button"
+            onClick={() => {
+              this.props.history.push("/page/2");
+            }}
+          >
+            Click to get redirected
+          </button>
+
           {this.nextPages(currentPage)}
         </div>
       );
@@ -82,10 +129,16 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MoviesList);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+    null,
+    {
+      pure: false
+    }
+  )(MoviesList)
+);
 
 const MovieGrid = styled.div`
   display: grid;
