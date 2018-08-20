@@ -40,9 +40,9 @@ class App extends Component {
             </header>
             <Toggle />
             <Switch>
-              <Route exact path="/" return component={MyMoviesList} />
+              <Route exact path="/" component={MyMoviesList} />
               <Route exact path="/page/:id" component={MyMoviesList} />
-              <Route path="/:id" component={MyMoviesList} />
+              <Route path="/:id" component={MovieDetail} />
             </Switch>
           </div>
         </Router>
