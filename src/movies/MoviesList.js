@@ -52,8 +52,6 @@ class MoviesList extends Component {
   async componentDidUpdate() {
     const { match, getMovies } = this.props;
     const { currentPage } = this.state;
-    console.log("match.params.id" + match.params.id);
-    console.log("currentPage" + currentPage);
     if (match.params.id !== currentPage) {
       console.log("match is not equal to currentpage");
       this.setState({
@@ -65,22 +63,51 @@ class MoviesList extends Component {
 
   nextPages = currentPage => {
     let pages = [];
-    for (
-      let i = parseInt(eval(currentPage) + 1);
-      i < parseInt(eval(currentPage) + 11);
-      i++
-    ) {
-      pages.push(
-        <Link to={`/page/${i}`} key={i}>
-          {i}
-        </Link>
-      );
+    let current = parseInt(eval(currentPage));
+    let amountOfNumbers = 0;
+    let maxListed = 10;
+
+    if (current > 0) {
+      // get up to 5 before it
+      for (let i = parseInt(current - 5); i < parseInt(current); i++) {
+        if (i > 0) {
+          pages.push(
+            <Link to={`/page/${i}`} key={i}>
+              {i}
+            </Link>
+          );
+          amountOfNumbers++;
+        }
+      }
     }
+
+    for (let i = parseInt(current); i < parseInt(eval(current + 5)); i++) {
+      if (i == current) {
+        pages.push(<CurrentPageLink key={i}>{i}</CurrentPageLink>);
+      } else {
+        pages.push(
+          <Link to={`/page/${i}`} key={i}>
+            {i}
+          </Link>
+        );
+      }
+      amountOfNumbers++;
+    }
+
+    if (amountOfNumbers < maxListed) {
+      for (let i = amountOfNumbers + 1; i < maxListed + 1; i++) {
+        pages.push(
+          <Link to={`/page/${i}`} key={i}>
+            {i}
+          </Link>
+        );
+      }
+    }
+
     return pages;
   };
 
   render() {
-    // console.log(this.state);
     const { movies, isLoaded, totalPages, match } = this.props;
 
     let currentPage = match.params.id;
@@ -97,16 +124,7 @@ class MoviesList extends Component {
               <Movie key={movie.id} movie={movie} />
             ))}
           </MovieGrid>
-          <button
-            type="button"
-            onClick={() => {
-              this.props.history.push("/page/2");
-            }}
-          >
-            Click to get redirected
-          </button>
-
-          {this.nextPages(currentPage)}
+          <PageNav>{this.nextPages(currentPage)}</PageNav>
         </div>
       );
     }
@@ -145,4 +163,19 @@ const MovieGrid = styled.div`
   padding: 1rem;
   grid-template-columns: repeat(6, 1fr);
   grid-row-gap: 1rem;
+`;
+
+const CurrentPageLink = styled.span`
+  color: red;
+`;
+
+const PageNav = styled.div`
+  > a {
+    color: white;
+    padding: 5px;
+    text-decoration: none;
+  }
+  span {
+    padding: 5px;
+  }
 `;
