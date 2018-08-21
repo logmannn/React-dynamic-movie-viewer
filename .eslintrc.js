@@ -6,6 +6,7 @@ module.exports = {
         "react/default-props-match-prop-types": 0,
         "no-shadow": "off",
         "no-eval": 0,
+        "react/forbid-prop-types": 0
     },
     "parser": "babel-eslint",
 };

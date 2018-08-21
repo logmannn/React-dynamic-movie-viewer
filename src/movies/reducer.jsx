@@ -6,30 +6,29 @@ const initialState = {
   moviesLoadedAt: null,
   movie: {},
   movieLoaded: false,
-  total_pages: 0
 };
 
-export default function(state = initialState, action) {
-  const { type, data, total_pages } = action;
+export default function (state = initialState, action) {
+  const { type, data } = action;
   switch (type) {
     case GET_MOVIES:
       return {
         ...state,
         movies: data,
         moviesLoaded: true,
-        moviesLoadedAt: new Date()
+        moviesLoadedAt: new Date(),
       };
     case GET_MOVIE:
       return {
         ...state,
         movie: data,
-        movieLoaded: true
+        movieLoaded: true,
       };
     case RESET_MOVIE:
       return {
         ...state,
         movie: {},
-        movieLoaded: false
+        movieLoaded: false,
       };
     default:
       return state;

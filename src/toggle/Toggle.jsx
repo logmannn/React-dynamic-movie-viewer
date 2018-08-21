@@ -1,13 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { toggleMessage } from './actions';
-import { getMovies } from '../movies/actions';
-
+/* eslint-disable react/prop-types */
 const Toggle = ({ messageVisibility, toggleMessage }) => (
   <div>
-    <button onClick={toggleMessage}>Toggle Me</button>
+    <button type="button" onClick={toggleMessage}>Toggle Me</button>
     {messageVisibility && (
       <p>You will be seeing this if redux action is toggled</p>
     )}
@@ -15,21 +14,16 @@ const Toggle = ({ messageVisibility, toggleMessage }) => (
 );
 
 const mapStateToProps = state => ({
-  messageVisibility: state.toggle.messageVisibility
+  messageVisibility: state.toggle.messageVisibility,
 });
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    {
-      toggleMessage
-    },
-    dispatch
-  );
+const mapDispatchToProps = dispatch => bindActionCreators({ toggleMessage }, dispatch);
 
 // connects mapStateToProps with mapDispatchToProps
 // (which dispatches the onClick action from each specific actions.js
 // to the reducer where the processing happens)
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(Toggle);
+/* eslint-disable react/prop-types */

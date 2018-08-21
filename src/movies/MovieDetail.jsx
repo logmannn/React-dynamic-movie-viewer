@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Overdrive from 'react-overdrive';
 import { connect } from 'react-redux';
@@ -10,6 +9,7 @@ import { getMovie, resetMovie } from './actions';
 const POSTER_PATH = 'http://image.tmdb.org/t/p/w154';
 const BACKDROP_PATH = 'http://image.tmdb.org/t/p/w1280';
 
+/* eslint-disable react/prop-types */
 class MovieDetail extends Component {
   componentDidMount() {
     const { getMovie, match } = this.props;
@@ -83,9 +83,9 @@ const MovieInfo = styled.div`
   }
 `;
 
-MovieDetail.propTypes = {
-  getMovie: PropTypes.func,
-  match: PropTypes.func,
-  resetMovie: PropTypes.func,
-  movie: PropTypes.func,
-};
+// MovieDetail.propTypes = {
+//   getMovie: PropTypes.func,
+//   match: PropTypes.string,
+//   resetMovie: PropTypes.func,
+//   movie: PropTypes.func,
+// };

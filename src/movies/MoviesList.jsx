@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import styled from 'styled-components';
@@ -7,6 +6,7 @@ import { Link, withRouter } from 'react-router-dom';
 import Movie from './Movie';
 import { getMovies } from './actions';
 
+/* eslint-disable react/prop-types */
 class MoviesList extends Component {
   constructor(props) {
     super(props);
@@ -21,7 +21,7 @@ class MoviesList extends Component {
     const {
       getMovies,
       match,
-      moviesLoadedAt,
+      // moviesLoadedAt,
       // isLoaded,
       // totalPages
     } = this.props;
@@ -36,10 +36,10 @@ class MoviesList extends Component {
     });
     // }
 
-    const oneHour = 60 * 60 * 1000;
-    // const oneHour = 1000;
-    const timeSinceMoviesPreviouslyLoaded = (new Date() - new Date(moviesLoadedAt)) / 1000;
-    console.log(`${timeSinceMoviesPreviouslyLoaded}/${oneHour / 1000}`);
+    // const oneHour = 60 * 60 * 1000;
+    // // const oneHour = 1000;
+    // const timeSinceMoviesPreviouslyLoaded = (new Date() - new Date(moviesLoadedAt)) / 1000;
+    // console.log(`${timeSinceMoviesPreviouslyLoaded}/${oneHour / 1000} ${isLoaded}`);
 
     // if (!isLoaded || new Date() - new Date(moviesLoadedAt) > oneHour) {
     // console.log(match.params.id);
@@ -105,7 +105,12 @@ class MoviesList extends Component {
   };
 
   render() {
-    const { movies, isLoaded, totalPages, match } = this.props;
+    const {
+      movies,
+      isLoaded,
+      // totalPages,
+      match,
+    } = this.props;
 
     let currentPage = match.params.id;
     if (!match.params.id) {
@@ -113,18 +118,16 @@ class MoviesList extends Component {
     }
 
     if (!isLoaded) return <h1>Loading</h1>;
-    else {
-      return (
-        <div>
-          <MovieGrid>
-            {movies.map(movie => (
-              <Movie key={movie.id} movie={movie} />
-            ))}
-          </MovieGrid>
-          <PageNav>{this.nextPages(currentPage)}</PageNav>
-        </div>
-      );
-    }
+    return (
+      <div>
+        <MovieGrid>
+          {movies.map(movie => (
+            <Movie key={movie.id} movie={movie} />
+          ))}
+        </MovieGrid>
+        <PageNav>{this.nextPages(currentPage)}</PageNav>
+      </div>
+    );
   }
 }
 
@@ -133,16 +136,10 @@ const mapStateToProps = state => ({
   movies: state.movies.movies,
   totalPages: state.movies.total_pages,
   isLoaded: state.movies.moviesLoaded,
-  moviesLoadedAt: state.movies.moviesLoadedAt
+  moviesLoadedAt: state.movies.moviesLoadedAt,
 });
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    {
-      getMovies
-    },
-    dispatch
-  );
+const mapDispatchToProps = dispatch => bindActionCreators({ getMovies }, dispatch);
 
 export default withRouter(
   connect(
@@ -150,9 +147,9 @@ export default withRouter(
     mapDispatchToProps,
     null,
     {
-      pure: false
-    }
-  )(MoviesList)
+      pure: false,
+    },
+  )(MoviesList),
 );
 
 const MovieGrid = styled.div`
@@ -177,7 +174,8 @@ const PageNav = styled.div`
   }
 `;
 
-MoviesList.propTypes = {
-  currentPage: PropTypes.string,
-  match: PropTypes.string,
-};
+// MoviesList.propTypes = {
+//   currentPage: PropTypes.string,
+//   match: PropTypes.string,
+//   movies: PropTypes.arrayOf,
+// };
