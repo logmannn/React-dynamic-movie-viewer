@@ -1,17 +1,19 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import styled from "styled-components";
-import Movie from "./Movie";
-import { getMovies } from "./actions";
-import { BrowserRouter as Router, Link, withRouter } from "react-router-dom";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import styled from 'styled-components';
+import { Link, withRouter } from 'react-router-dom';
+import Movie from './Movie';
+import { getMovies } from './actions';
 
 class MoviesList extends Component {
   constructor(props) {
     super(props);
+    const { match } = this.props;
+
     this.state = {
-      currentPage: this.props.match.id,
-      previousPage: ""
+      currentPage: match.id,
     };
   }
 
@@ -19,12 +21,10 @@ class MoviesList extends Component {
     const {
       getMovies,
       match,
-      isLoaded,
       moviesLoadedAt,
-      totalPages
+      // isLoaded,
+      // totalPages
     } = this.props;
-
-    // console.log("what is this" + match.id);
 
     // if (match.id == null) {
     //   this.setState({
@@ -32,19 +32,17 @@ class MoviesList extends Component {
     //   });
     // } else {
     this.setState({
-      currentPage: match.id
+      currentPage: match.id,
     });
     // }
 
     const oneHour = 60 * 60 * 1000;
     // const oneHour = 1000;
-    const timeSinceMoviesPreviouslyLoaded =
-      (new Date() - new Date(moviesLoadedAt)) / 1000;
+    const timeSinceMoviesPreviouslyLoaded = (new Date() - new Date(moviesLoadedAt)) / 1000;
     console.log(`${timeSinceMoviesPreviouslyLoaded}/${oneHour / 1000}`);
 
     // if (!isLoaded || new Date() - new Date(moviesLoadedAt) > oneHour) {
     // console.log(match.params.id);
-    console.log("componentDidMount" + match.params.id);
     getMovies(match.params.id);
     // }
   }
@@ -53,53 +51,52 @@ class MoviesList extends Component {
     const { match, getMovies } = this.props;
     const { currentPage } = this.state;
     if (match.params.id !== currentPage) {
-      console.log("match is not equal to currentpage");
       this.setState({
-        currentPage: match.params.id
+        currentPage: match.params.id,
       });
       getMovies(match.params.id);
     }
   }
 
-  nextPages = currentPage => {
-    let pages = [];
-    let current = parseInt(eval(currentPage));
+  nextPages = (currentPage) => {
+    const pages = [];
+    const current = parseInt(currentPage, 10);
     let amountOfNumbers = 0;
-    let maxListed = 10;
+    const maxListed = 10;
 
     if (current > 0) {
       // get up to 5 before it
-      for (let i = parseInt(current - 5); i < parseInt(current); i++) {
+      for (let i = parseInt(current - 5, 10); i < parseInt(current, 10); i += 1) {
         if (i > 0) {
           pages.push(
             <Link to={`/page/${i}`} key={i}>
               {i}
-            </Link>
+            </Link>,
           );
-          amountOfNumbers++;
+          amountOfNumbers += 1;
         }
       }
     }
 
-    for (let i = parseInt(current); i < parseInt(eval(current + 5)); i++) {
-      if (i == current) {
+    for (let i = parseInt(current, 10); i < parseInt(eval(current + 5), 10); i += 1) {
+      if (i === current) {
         pages.push(<CurrentPageLink key={i}>{i}</CurrentPageLink>);
-      } else {
+      } else if (i <= 1000) {
         pages.push(
           <Link to={`/page/${i}`} key={i}>
             {i}
-          </Link>
+          </Link>,
         );
       }
-      amountOfNumbers++;
+      amountOfNumbers += 1;
     }
 
     if (amountOfNumbers < maxListed) {
-      for (let i = amountOfNumbers + 1; i < maxListed + 1; i++) {
+      for (let i = amountOfNumbers + 1; i < maxListed + 1; i += 1) {
         pages.push(
           <Link to={`/page/${i}`} key={i}>
             {i}
-          </Link>
+          </Link>,
         );
       }
     }
@@ -179,3 +176,8 @@ const PageNav = styled.div`
     padding: 5px;
   }
 `;
+
+MoviesList.propTypes = {
+  currentPage: PropTypes.string,
+  match: PropTypes.string,
+};

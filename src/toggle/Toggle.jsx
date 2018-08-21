@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-import { toggleMessage } from "./actions";
-import { getMovies } from "../movies/actions";
+import { toggleMessage } from './actions';
+import { getMovies } from '../movies/actions';
 
 const Toggle = ({ messageVisibility, toggleMessage }) => (
   <div>

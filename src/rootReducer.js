@@ -1,7 +1,7 @@
-import { combineReducers } from "redux";
+import { combineReducers } from 'redux';
 
-import toggle from "./toggle/reducer";
-import movies from "./movies/reducer";
+import toggle from './toggle/reducer';
+import movies from './movies/reducer';
 
 const rootReducer = combineReducers({
   movies,

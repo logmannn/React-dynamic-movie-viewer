@@ -1,12 +1,14 @@
-import React, { Component } from "react";
-import styled from "styled-components";
-import Overdrive from "react-overdrive";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { Poster } from "./Movie";
-import { getMovie, resetMovie } from "./actions";
-const POSTER_PATH = "http://image.tmdb.org/t/p/w154";
-const BACKDROP_PATH = "http://image.tmdb.org/t/p/w1280";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import Overdrive from 'react-overdrive';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Poster } from './Movie';
+import { getMovie, resetMovie } from './actions';
+
+const POSTER_PATH = 'http://image.tmdb.org/t/p/w154';
+const BACKDROP_PATH = 'http://image.tmdb.org/t/p/w1280';
 
 class MovieDetail extends Component {
   componentDidMount() {
@@ -44,21 +46,20 @@ class MovieDetail extends Component {
 
 const mapStateToProps = state => ({
   movie: state.movies.movie,
-  isLoaded: state.movies.movieLoaded
+  isLoaded: state.movies.movieLoaded,
 });
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    {
-      getMovie,
-      resetMovie
-    },
-    dispatch
-  );
+const mapDispatchToProps = dispatch => bindActionCreators(
+  {
+    getMovie,
+    resetMovie,
+  },
+  dispatch,
+);
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(MovieDetail);
 
 const MovieWrapper = styled.div`
@@ -81,3 +82,10 @@ const MovieInfo = styled.div`
     top: -5rem;
   }
 `;
+
+MovieDetail.propTypes = {
+  getMovie: PropTypes.func,
+  match: PropTypes.func,
+  resetMovie: PropTypes.func,
+  movie: PropTypes.func,
+};
